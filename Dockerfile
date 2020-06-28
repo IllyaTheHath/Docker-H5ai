@@ -17,7 +17,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${APK_MIRROR}/g" /etc/apk/repositories \
     && mkdir -p /run/nginx \
 # get h5ai and filebrowser
     && apk --no-cache add curl zip unzip bash \
-    && curl -o /tmp/h5ai.zip https://release.larsjung.de/h5ai/h5ai-${H5AI_VERSION}.zip \
+    && curl -o /var/h5ai.zip https://release.larsjung.de/h5ai/h5ai-${H5AI_VERSION}.zip \
     && curl -fsSL https://filebrowser.org/get.sh | bash \
     && apk del curl bash \
     && rm -rf /var/cache/apk/* \

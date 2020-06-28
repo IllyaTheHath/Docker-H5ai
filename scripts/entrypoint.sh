@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ ! -d /www/_h5ai ]; then
     echo "Copying h5ai files... "
-    unzip -q /tmp/h5ai.zip -d /www/
+    unzip -q /var/h5ai.zip -d /www/
     chown -R nginx:nginx /www/*
 fi
 if [ -e /etc/nginx/conf.d/default.conf ]; then
