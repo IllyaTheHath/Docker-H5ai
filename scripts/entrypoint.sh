@@ -3,7 +3,6 @@ if [ ! -d /www/_h5ai ]; then
     echo "Copying h5ai files... "
     unzip -q /tmp/h5ai.zip -d /www/
     chown -R nginx:nginx /www/*
-    rm -r /tmp/h5ai
 fi
 if [ -e /etc/nginx/conf.d/default.conf ]; then
     echo "Config nginx"
