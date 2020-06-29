@@ -7,6 +7,9 @@ ENV APK_MIRROR="mirrors.tuna.tsinghua.edu.cn" \
     TZ="Asia/Shanghai" \
     TZ_PHP="Asia\/Shanghai"
 
+# bootstrap
+COPY scripts/bootstrap.sh /bootstrap.sh
+
 # install nginx and php7
 RUN sed -i "s/dl-cdn.alpinelinux.org/${APK_MIRROR}/g" /etc/apk/repositories \
     && apk update \
@@ -15,6 +18,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${APK_MIRROR}/g" /etc/apk/repositories \
     && chown -R nginx:nginx /var/lib/nginx \
     && chown -R nginx:nginx /www \
     && mkdir -p /run/nginx \
+    && rm /etc/nginx/conf.d/default.conf \
+    && sed -i "s/client_max_body_size 1m/client_max_body_size 0/g" /etc/nginx/nginx.conf \
 # get h5ai and filebrowser
     && apk --no-cache add curl zip unzip bash \
     && curl -o /var/h5ai.zip https://release.larsjung.de/h5ai/h5ai-${H5AI_VERSION}.zip \
@@ -26,7 +31,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${APK_MIRROR}/g" /etc/apk/repositories \
     && apk --no-cache add tzdata \
     && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
-    && sed -i "s/^;date\.timezone =/date\.timezone =${TZ_PHP}/g" /etc/php7/php.ini
+    && sed -i "s/^;date\.timezone =/date\.timezone =${TZ_PHP}/g" /etc/php7/php.ini \
+    && chmod +x /bootstrap.sh
 
 # add website
 COPY conf/h5ai.nginx.conf /etc/nginx/conf.d/
@@ -34,15 +40,10 @@ COPY conf/h5ai.nginx.conf /etc/nginx/conf.d/
 # supervisor
 COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# entrypoint
-COPY scripts/entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
 WORKDIR /www
 EXPOSE 80
 
 VOLUME ["/www"]
 VOLUME ["/etc/filebrowser"]
 
-CMD [ "sh", "-c", "/entrypoint.sh" ]
+CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf" ]

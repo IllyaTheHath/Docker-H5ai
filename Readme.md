@@ -17,10 +17,12 @@ docker run -d \
 illyathehath/h5ai
 ```
 The path */www* is where h5ai and your files places.  
+<small>Notice that there are two folders *public* and *private* under the path */www*, the *public* folder contains h5ai and files other can see in h5ai webui, but the files in *private* can only see in filebrowser.</small>
+
 The path */etc/filebrowser* is where File Browser database places.  
 
-File managent(File Browser) path is under http://yourdomain/manage/ (Don't forge '/' at the end of the url)
-Default username and password are all ***admin***
+File managent(File Browser) path is http://yourdomain/manage/ (Don't forge '/' at the end of the url).  
+Default username and password are all ***admin***.
 
 ### Using Docker Compose
 ```
@@ -36,8 +38,12 @@ services:
       - $(pwd)/h5ai/filebrowser:/etc/filebrowser
 ```
 
-### Build your own image
-```docker build -t your/h5ai .```
+## Build your own image
+```
+git clone https://github.com/IllyaTheHath/Docker-H5ai.git
+cd Docker-H5ai
+docker build -t your/h5ai .
+```
 
 Please note that there are four environment variable:  
 ***APK_MIRROR*** is alpine package manager's source mirror, default value is ***mirrors.tuna.tsinghua.edu.cn*** which is located in china.  
