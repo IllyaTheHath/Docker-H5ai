@@ -34,8 +34,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - $(pwd)/h5ai/files:/www
-      - $(pwd)/h5ai/filebrowser:/etc/filebrowser
+      - ./h5ai/files:/www
+      - ./h5ai/filebrowser:/etc/filebrowser
 ```
 
 ## Build your own image
